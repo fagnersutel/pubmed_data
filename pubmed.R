@@ -24,6 +24,7 @@ QueryCount(search)
 records <- EUtilsGet(search)
 years <- RISmed::YearPubmed(records)
 pubs_count <- as.data.frame(table(years))
+pubs_count
 
 total <- NULL
 for (i in 2000:2018){
@@ -108,7 +109,7 @@ tally <- array()
 x <- 1
 for (i in 2013:2017){
   Sys.sleep(1)
-  r <- EUtilsSummary('Pain Neuromodulatio', type='esearch', db='pubmed', mindate=i, maxdate=i)
+  r <- EUtilsSummary('Pain Neuromodulation', type='esearch', db='pubmed', mindate=i, maxdate=i)
   tally[x] <- QueryCount(r)
   x <- x + 1
 }
@@ -133,7 +134,7 @@ names(transposon) <- 2013:2017
 max(transposon)
 
 
-barplot(transposon, las=2, ylim=c(0,50000), main="Num artigos PUBMED contendo pain and therapeutic")
+barplot(transposon, las=2, ylim=c(0,20000), main="Num artigos PUBMED contendo pain and therapeutic")
 
 
 trna <- array()
@@ -148,7 +149,7 @@ for (i in 2013:2017){
 names(trna) <- 2013:2017
 max(trna)
 
-barplot(trna, las=2, ylim=c(0,50000), main="Num artigos PUBMED contendo Pharmacological modulation")
+barplot(trna, las=2, ylim=c(0,5000), main="Num artigos PUBMED contendo Pharmacological modulation")
 
 
 
@@ -172,15 +173,22 @@ options(scipen=999)
 barplot(total, las=2, ylim=c(0,1200000), main="Numero de artigos do PubMed por ano")
 
 
-
+#var um pelo total
 tally_norm <- tally / total
+#var dois pelo total
 transposon_norm <- transposon / total
+#var tres pelo total
 trna_norm <- trna / total
 
-par(mfrow=c(1,3))
+par(mfrow=c(2,2))
 barplot(tally_norm, las=2)
+title(main = "Pain Neuromodulation", font.main = 4)
 barplot(transposon_norm, las=2)
+title(main = "Pain and Therapeutic", font.main = 4)
 barplot(trna_norm, las=2)
+title(main = "Pharmacological modulation", font.main = 4)
+barplot(total, las=2)
+title(main = "Universal", font.main = 4)
 #reset
 par(mfrow=c(1,1))
 
@@ -353,7 +361,6 @@ out.A <- batch_pubmed_download(pubmed_query_string = new_query,
 out.A
 my_PM_list <- articles_to_list(my_abstracts_xml)
 class(my_PM_list[[4]])
-
 cat(substr(my_PM_list[[4]], 1, 984))
 
 
@@ -409,12 +416,12 @@ dami_query_string <- "Damiano Fantini[AU]"
 dami_on_pubmed <- get_pubmed_ids(dami_query_string)
 dami_papers <- fetch_pubmed_data(dami_on_pubmed, format = "abstract")
 dami_papers[dami_papers == ""] <- "\n"
-cat(paste(dami_papers[1:65], collapse = ""))
+cat(paste(dami_papers[1:10], collapse = ""))
 #
 ## Not run: 
 # Example 03: retrieve data from PubMed and save as XML file
 ml_query <- "Machine Learning[TI] AND 2016[PD]"
-out1 <- batch_pubmed_download(pubmed_query_string = ml_query, batch_size = 180)
+out1 <- batch_pubmed_download(pubmed_query_string = ml_query, batch_size = 10)
 XML::xmlParse(out1[1])
 #
 # Example 04: retrieve data from PubMed and save as TXT file
@@ -478,5 +485,5 @@ pubmed_data$Abstract <- gsub(",", " ", pubmed_data$Abstract, fixed = TRUE)
 # see what we have
 str(pubmed_data)
 
-
+table(pubmed_data)
 
