@@ -4,6 +4,9 @@
 #install.packages('fpc', dependencies = T)
 #install.packages('cluster', dependencies = T)
 #install.packages("rentrez", dependencies = T)
+#install.packages("RISmed", dependencies = T)
+#install.packages("easyPubMed", dependencies = TRUE )
+library(easyPubMed)
 library(rentrez)
 library (wordcloud)
 library (tm)
@@ -12,9 +15,10 @@ library (cluster)
 library(pubmed.mineR)
 library(ggplot2)
 
-pubtator_output <- pubtator_function(29656905)
+pubtator_output <- pubtator_function(28123404)
 head(pubtator_output)
 
+#####################
 
 #query <- "(exome OR whole OR deep OR high-throughput OR (next AND generation) OR (massively AND parallel)) AND sequencing"
 query <- "bioethics AND medical AND Brazil"
@@ -28,10 +32,10 @@ pubs_count
 
 total <- NULL
 for (i in 2000:2018){
-  peryear <- EUtilsSummary("", type="esearch", db="pubmed", mindate=i, maxdate=i)
-  total[i] <- QueryCount(peryear)
+    peryear <- EUtilsSummary("", type="esearch", db="pubmed", mindate=i, maxdate=i)
+    total[i] <- QueryCount(peryear)
 }
-
+total
 year <- 2000:2018
 total_pubs_count<- as.data.frame(cbind(year,total[year]))
 names(total_pubs_count) <- c("year","Total_publications")
@@ -48,8 +52,8 @@ journal_names <- paste(journal_count_top25$journal,"[jo]",sep="")
 
 total_journal <- NULL
 for (i in journal_names){
-  perjournal <- EUtilsSummary(i, type='esearch', db='pubmed',mindate=1980, maxdate=2013)
-  total_journal[i] <- QueryCount(perjournal)
+    perjournal <- EUtilsSummary(i, type='esearch', db='pubmed',mindate=1980, maxdate=2013)
+    total_journal[i] <- QueryCount(perjournal)
 }
 
 journal_total <- cbind(journal_count_top25,total_journal)
@@ -63,19 +67,19 @@ pubs_per_year <- read.table("publications_per_year.txt",header = T,sep="\t")
 pubs_per_journal <- read.table("publications_per_journal.txt",header = T,sep="\t")
 
 ggplot(pubs_per_year,aes(year, publications_normalized)) + geom_line (colour="blue",size=2) +
-  xlab("Ano") +
-  ylab("Artigos/100000 artigos")+
-  ggtitle("Artigos {Bioetica, Medical, Brazil}PubMed")
+    xlab("Ano") +
+    ylab("Artigos/100000 artigos")+
+    ggtitle("Artigos {Bioetica, Medical, Brazil}PubMed")
 
 ggplot(pubs_per_journal,aes(journal, publications,fill=journal)) + geom_bar(stat="identity")+
-  coord_flip()+
-  theme(legend.position="none")
+    coord_flip()+
+    theme(legend.position="none")
 
 ggplot(pubs_per_journal ,aes(journal, publications_normalized,fill=journal)) + geom_bar(stat="identity")+
-  coord_flip()+
-  theme(legend.position="none")
+    coord_flip()+
+    theme(legend.position="none")
 
-
+#########################
 
 
 #Procurar dados de autor
@@ -108,26 +112,26 @@ QueryCount(res3)
 tally <- array()
 x <- 1
 for (i in 2013:2017){
-  Sys.sleep(1)
-  r <- EUtilsSummary('Pain Neuromodulation', type='esearch', db='pubmed', mindate=i, maxdate=i)
-  tally[x] <- QueryCount(r)
-  x <- x + 1
+    Sys.sleep(1)
+    r <- EUtilsSummary('Pain Neuromodulation', type='esearch', db='pubmed', mindate=i, maxdate=i)
+    tally[x] <- QueryCount(r)
+    x <- x + 1
 }
 
 names(tally) <- 2013:2017
 max(tally)
 
-barplot(tally, las=2, ylim=c(0,50000), main="Num artigos PUBMED contendo Pain Neuromodulatio")
+barplot(tally, las=2, ylim=c(0,500), main="Num artigos PUBMED contendo Pain Neuromodulatio")
 
 
 
 transposon <- array()
 x <- 1
 for (i in 2013:2017){
-  Sys.sleep(1)
-  r <- EUtilsSummary('pain and therapeutic', type='esearch', db='pubmed', mindate=i, maxdate=i)
-  transposon[x] <- QueryCount(r)
-  x <- x + 1
+    Sys.sleep(1)
+    r <- EUtilsSummary('pain and therapeutic', type='esearch', db='pubmed', mindate=i, maxdate=i)
+    transposon[x] <- QueryCount(r)
+    x <- x + 1
 }
 
 names(transposon) <- 2013:2017
@@ -140,10 +144,10 @@ barplot(transposon, las=2, ylim=c(0,20000), main="Num artigos PUBMED contendo pa
 trna <- array()
 x <- 1
 for (i in 2013:2017){
-  Sys.sleep(1)
-  r <- EUtilsSummary('Pharmacological modulation', type='esearch', db='pubmed', mindate=i, maxdate=i)
-  trna[x] <- QueryCount(r)
-  x <- x + 1
+    Sys.sleep(1)
+    r <- EUtilsSummary('Pharmacological modulation', type='esearch', db='pubmed', mindate=i, maxdate=i)
+    trna[x] <- QueryCount(r)
+    x <- x + 1
 }
 
 names(trna) <- 2013:2017
@@ -160,10 +164,10 @@ summary(test)
 total <- array()
 x <- 1
 for (i in 2013:2017){
-  Sys.sleep(1)
-  r <- EUtilsSummary('', type='esearch', db='pubmed', mindate=i, maxdate=i)
-  total[x] <- QueryCount(r)
-  x <- x + 1
+    Sys.sleep(1)
+    r <- EUtilsSummary('', type='esearch', db='pubmed', mindate=i, maxdate=i)
+    total[x] <- QueryCount(r)
+    x <- x + 1
 }
 
 names(total) <- 2013:2017
@@ -193,7 +197,7 @@ title(main = "Universal", font.main = 4)
 par(mfrow=c(1,1))
 
 
-
+#######################
 
 
 
@@ -202,20 +206,21 @@ query_level2 <- EUtilsSummary(query, retmax=100, mindate=2016, maxdate=2016)
 query_level3<- EUtilsGet(query_level2)
 class(query_level3)
 pubmed_data <- data.frame('Abstract'= AbstractText(query_level3))
-for (Abs in 1:100){
-    doc1 <- data.frame(pubmed_data[Abs, ])
-    doc2 <- file.path("c:/Users/fsmoura/Documents/R-files/abs/", paste0(Abs, ".txt"))
+fim <- as.numeric(length(pubmed_data[,1]))
+for (Abs in 1:fim){
+    doc1 <- pubmed_data[Abs, ]
+    doc2 <- file.path("~/OneDrive/Cursos/meusR/abstracts/", paste0(Abs, ".txt"))
     write.table(doc1, file = doc2, sep = "", row.names = FALSE, col.names = FALSE, quote = FALSE,
-                 append = FALSE)
+                append = FALSE)
 }
 
-source <- DirSource("c:/Users/fsmoura/Documents/R-files/abs/")
+source <- DirSource("~/OneDrive/Cursos/meusR/abstracts/")
 testdoc <- Corpus(source)
 testdoc1 <- tm_map(testdoc, removeWords, c("may","are","use","can","the", "then", "this", "is", "a", "well", stopwords ("english")))
 testdoc1
 testdoc2 <- TermDocumentMatrix (testdoc1, control = list(tokenize=scan_tokenizer, stopwords =
-                                                            TRUE, removePunctuation = TRUE, stripWhitespace = TRUE, stemming = TRUE, removeNumbers=
-                                                            TRUE
+                                                             TRUE, removePunctuation = TRUE, stripWhitespace = TRUE, stemming = TRUE, removeNumbers=
+                                                             TRUE
 ))
 testdoc2
 testdoc3 <- as.matrix(testdoc2)
@@ -229,8 +234,8 @@ findAssocs(x=testdoc2, term="ovarian", corlimit=0.6)
 
 set.seed(1234)
 wordcloud(words = testdoc5$word, freq = testdoc5$freq, min.freq = 1,
-           max.words=200, random.order=FALSE, rot.per=0.35,
-           colors=brewer.pal(8, "Dark2"))
+          max.words=200, random.order=FALSE, rot.per=0.35,
+          colors=brewer.pal(8, "Dark2"))
 
 
 testdoc5 <- removeSparseTerms(testdoc2, 0.70)
@@ -251,7 +256,7 @@ clusplot(as.matrix(c2), km1$cluster, color=T, shade=T, labels=2, lines=0)
 
 
 doctest <- DocumentTermMatrix (testdoc1, control = list (tokenize=scan_tokenizer, stopwords =
-                                                           TRUE, removePunctuation = TRUE,
+                                                             TRUE, removePunctuation = TRUE,
                                                          stripWhitespace = TRUE,
                                                          stemming = TRUE,
                                                          removeNumbers= TRUE
@@ -265,6 +270,8 @@ plot(c3, hang=-1)
 plot.new()
 plot(c3, hang=-1) 
 
+
+################################
 
 
 
@@ -327,9 +334,8 @@ cat(raw_recs, file=tf)
 ape::read.dna(tf, format="fasta")
 
 
-
-#install.packages("easyPubMed", dependencies = TRUE )
-library(easyPubMed)
+##EasyPubMed
+setwd("~/OneDrive/Cursos/meusR/abstracts/")
 first_PM_query <- "T cell receptor"                  # text of the query
 first_PM_records <- get_pubmed_ids(first_PM_query)   # submit the query to PubMed
 fetch_pubmed_data(first_PM_records, retmax = 1)      # retrieve the first output record
@@ -345,7 +351,7 @@ my_abstracts_txt[1:10]
 my_abstracts_xml <- fetch_pubmed_data(my_entrez_id)
 class(my_abstracts_xml)
 my_titles <- unlist(xpathApply(my_abstracts_xml, "//ArticleTitle", saveXML))
-#Para não pesar pedi os primeiros 10 apenas
+#Para nao pesar pedi os primeiros 10 apenas
 my_titles <- gsub("(^.{5,10}Title>)|(<\\/.*$)", "", my_titles[1:10])
 my_titles[nchar(my_titles)>75] <- paste(substr(my_titles[nchar(my_titles)>75], 1, 70),
                                         "...", sep = "")
@@ -361,16 +367,19 @@ out.A <- batch_pubmed_download(pubmed_query_string = new_query,
 out.A
 my_PM_list <- articles_to_list(my_abstracts_xml)
 class(my_PM_list[[4]])
+#pega as primeiras 984 linhas
 cat(substr(my_PM_list[[4]], 1, 984))
 
 
 curr_PM_record <- my_PM_list[[4]]
 custom_grep(curr_PM_record, tag = "ArticleTitle", format = "char")
-custom_grep(curr_PM_record, tag = "EIdType")
 custom_grep(curr_PM_record, tag = "Title")
 custom_grep(curr_PM_record, tag = "DateRevised")
 custom_grep(curr_PM_record, tag = "Year", format = "char")
 custom_grep(curr_PM_record, tag = "LastName", format = "char")
+lista <- custom_grep(curr_PM_record, tag = "EIdType")
+lista
+Reduce(rbind, lista)
 
 
 my.df <- article_to_df(curr_PM_record, max_chars = 18)
@@ -385,9 +394,9 @@ my.df[,c("pmid", "title", "jabbrv", "firstname", "address")]
 my.df2 <- article_to_df(curr_PM_record, autofill = TRUE)
 my.df2$title <- substr(my.df2$title, 1, 15)
 my.df2$jabbrv <- substr(my.df2$jabbrv, 1, 10)
-
 my.df2$address <- substr(my.df2$address, 1, 19)
-my.df2[,c("pmid", "title", "jabbrv", "firstname", "address")]
+my.df2$doi <- substr(my.df2$doi, 1, 19)
+my.df2[,c("pmid", "title", "jabbrv", "firstname", "address", "doi")]
 
 
 
@@ -436,16 +445,19 @@ PM_data <- articles_to_list(out3[1])
 PM_record_df <- article_to_df(PM_data[[100]])
 print(PM_record_df[1,])
 print(PM_record_df[,"address"])
+print(PM_record_df[,"doi"])
+print(PM_record_df[,"pmid"])
+
 #
 # Example 06: query PubMed and extract information from multiple records in one step 
 ml_query <- "Machine Learning[TI] AND 2016[PD]"
 out4 <- batch_pubmed_download(pubmed_query_string = ml_query, batch_size = 10)
 PM_tab <- table_articles_byAuth(out4[1], autofill = TRUE, included_authors = "last")
 PM_tab$address <- substr(PM_tab$address, 1, 15)
-PM_tab[50:70,c("pmid", "jabbrv", "year", "lastname", "address")]
+PM_tab[1:100,c("pmid", "jabbrv", "year", "lastname", "address")]
 #
 
-
+#####################
 
 library(purrr)
 Query <- c('rituximab OR bevacizumab','meningitis OR headache')
@@ -454,16 +466,12 @@ x <- as.data.frame(cbind(Heading,Query),stringsAsFactors = F)
 x$PMID<- ""
 ids <- map(x[,"Query"],get_pubmed_ids)
 for (i in 1:length(ids)) {
-  x[i,"PMID"]<- paste(ids[[i]][["IdList"]],collapse = ",")
+    x[i,"PMID"]<- paste(ids[[i]][["IdList"]],collapse = ",")
 }
 x
 
 
-
-
-
-
-
+######################
 search_topic <- 'copd'
 search_query <- EUtilsSummary(search_topic, retmax=100, mindate=2012,maxdate=2012)
 summary(search_query)
